@@ -2,7 +2,7 @@ module Main where
 
 import Control.Monad (when)
 import Control.Exception (try)
-import System.IO (stdin, hSetEcho, hSetBuffering, hReady, BufferMode (NoBuffering) )
+import System.IO (stdin, stdout, hSetEcho, hSetBuffering, hReady, BufferMode (NoBuffering) )
 import ViewUtils (clearScreen, showInRectangle, clearRectangle, showInGrid, highlightCell, printFromBottom)
 
 data RowData = Row { smth :: String } deriving Eq
@@ -18,6 +18,7 @@ initialRows = [
 main :: IO ()
 main = do
   hSetBuffering stdin NoBuffering
+  hSetBuffering stdout NoBuffering
   hSetEcho stdin False
   loop initialRows Nothing []
   where
@@ -28,6 +29,7 @@ main = do
     rowCount = length initialRows
     debugLinesCount = 20
 
+    loop :: [RowData] -> (Maybe Int) -> [String] -> IO ()
     loop rows activeCellY debugMessages = do
       clearScreen
       let activeCellCoords = fmap (\y -> (0, y)) activeCellY
